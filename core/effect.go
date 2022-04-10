@@ -20,7 +20,7 @@ type Effect struct {
 	BackgroundBlue  byte
 }
 
-func (e *Effect) toBytes() []byte {
+func (e *Effect) ToBytes() []byte {
 	return []byte{
 		e.Kind, e.Speed, e.Crossfade,
 		e.ForegroundRed, e.ForegroundGreen, e.ForegroundBlue,

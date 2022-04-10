@@ -1,13 +1,14 @@
-package core
+package devices
 
 import (
 	"encoding/json"
+	"github.com/area3001/goira/core"
 	"github.com/nats-io/nats.go"
 	"time"
 )
 
 const (
-	MacVarName     = "mac_address"
+	MacVarName     = "mac_string"
 	IpVarName      = "IP"
 	HwTypeVarName  = "HWTYPE"
 	HwRevVarName   = "HWREV"
@@ -36,13 +37,13 @@ func ParseDevice(m *nats.Msg) (*Device, error) {
 	}
 
 	return &Device{
-		MAC:          MapString(data, MacVarName, ""),
-		IP:           MapString(data, IpVarName, ""),
-		ExternalMode: MapString(data, ExtModeVarName, ""),
-		Mode:         MapString(data, ModeVarName, ""),
+		MAC:          core.MapString(data, MacVarName, ""),
+		IP:           core.MapString(data, IpVarName, ""),
+		ExternalMode: core.MapString(data, ExtModeVarName, ""),
+		Mode:         core.MapString(data, ModeVarName, ""),
 		Hardware: Hardware{
-			Kind:    MapString(data, HwTypeVarName, ""),
-			Version: MapString(data, HwRevVarName, ""),
+			Kind:    core.MapString(data, HwTypeVarName, ""),
+			Version: core.MapString(data, HwRevVarName, ""),
 		},
 		LastBeat: time.Now(),
 	}, nil
