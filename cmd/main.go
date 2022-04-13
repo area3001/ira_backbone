@@ -7,7 +7,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/nats-io/nats.go"
 	"log"
-	"net/http"
 	"os"
 )
 
@@ -29,17 +28,13 @@ func main() {
 		_ = nc.Close()
 	}()
 
-	app := goira.NewApp(nc)
+	e := echo.New()
+
+	app := goira.NewApp(nc, e)
 
 	if err := app.Devices.Service.Ping(); err != nil {
 		log.Panicln(err)
 	}
-
-	e := echo.New()
-
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
