@@ -11,8 +11,16 @@ type Service struct {
 	reader *Reader
 }
 
+func (c *Service) Keys() ([]string, error) {
+	return c.reader.Keys()
+}
+
 func (c *Service) ListDevices() ([]Device, error) {
 	return c.reader.List()
+}
+
+func (c *Service) GetDevice(mac string) (*Device, error) {
+	return c.reader.Get(mac)
 }
 
 func (c *Service) Ping() error {

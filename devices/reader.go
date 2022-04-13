@@ -10,6 +10,10 @@ type Reader struct {
 	devices nats.KeyValue
 }
 
+func (r *Reader) Keys() ([]string, error) {
+	return r.devices.Keys()
+}
+
 func (r *Reader) List() ([]Device, error) {
 	result := make([]Device, 0)
 
@@ -33,4 +37,18 @@ func (r *Reader) List() ([]Device, error) {
 	}
 
 	return result, nil
+}
+
+func (r *Reader) Get(key string) (*Device, error) {
+	entry, err := r.devices.Get(key)
+	if err != nil {
+		return nil, fmt.Errorf("unable to retrieve device with key %s: %w", key, err)
+	}
+
+	var dev Device
+	if err := json.Unmarshal(entry.Value(), &dev); err != nil {
+		return nil, fmt.Errorf("unable to decode the info for device %s: %w", key, err)
+	}
+
+	return &dev, nil
 }

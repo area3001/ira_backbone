@@ -20,3 +20,7 @@ type Mode struct {
 	Name            string `json:"name"`
 	InfraredEnabled bool   `json:"infraredEnabled"`
 }
+
+var Modes = []*Mode{
+	ExternallySet, DmxIn, DmxOut, DmxToPixelsWithIr, DmxToPixels, RgbToPixelsWithIr, RgbToPixels, FxToPixelsWithIr, FxToPixels, AutoFxWithIr, AutoFx, Emergency,
+}
