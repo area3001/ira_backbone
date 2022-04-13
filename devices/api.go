@@ -18,6 +18,14 @@ func RegisterEndpoints(e *echo.Group, service *Service) {
 	e.DELETE("/:key", reset(service))
 }
 
+// HealthCheck godoc
+// @Summary get the keys for known devices.
+// @Description get the keys for known devices.
+// @Tags root
+// @Accept */*
+// @Produce json
+// @Success 200 {object} map[string]interface{}
+// @Router /devices [get]
 func listDeviceKeys(service *Service) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		keys, err := service.Keys()
@@ -31,6 +39,14 @@ func listDeviceKeys(service *Service) echo.HandlerFunc {
 	}
 }
 
+// HealthCheck godoc
+// @Summary get the information for a device.
+// @Description get the information for a device.
+// @Tags root
+// @Accept */*
+// @Produce json
+// @Success 200 {object} map[string]interface{}
+// @Router /devices/:id [get]
 func getDevice(service *Service) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		key := c.Param("key")

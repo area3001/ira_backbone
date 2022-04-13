@@ -1,0 +1,49 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "This is the Fri3d IRA ReST API",
+        "title": "Fri3d IRA API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "code@fri3d.be",
+            "url": "http://www.swagger.io/support",
+            "email": "code@fri3d.be"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:1323",
+    "basePath": "/",
+    "paths": {
+        "/devices": {
+            "get": {
+                "description": "get the keys for known devices.",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "root"
+                ],
+                "summary": "get the keuys for known devices.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
