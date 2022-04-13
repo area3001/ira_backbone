@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/area3001/goira"
+	"github.com/area3001/goira/app"
 	"github.com/area3001/goira/comm"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -30,7 +30,7 @@ func main() {
 
 	e := echo.New()
 
-	app := goira.NewApp(nc, e)
+	app := app.NewApp(nc, e)
 
 	if err := app.Devices.Service.Ping(); err != nil {
 		log.Panicln(err)

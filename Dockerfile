@@ -18,8 +18,8 @@ RUN go build -o /goira && chmod a+x /goira
 ##
 ## Deploy
 ##
-#FROM gcr.io/distroless/base-debian10
-FROM ubuntu
+FROM gcr.io/distroless/base-debian10
+#FROM ubuntu
 
 WORKDIR /
 
@@ -27,6 +27,6 @@ COPY --from=build /goira /goira
 
 EXPOSE 1323
 
-#USER nonroot:nonroot
+USER nonroot:nonroot
 
 CMD ["/goira"]

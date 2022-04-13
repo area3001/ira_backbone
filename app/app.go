@@ -1,4 +1,4 @@
-package goira
+package app
 
 import (
 	"github.com/area3001/goira/comm"
