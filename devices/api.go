@@ -24,7 +24,7 @@ func RegisterEndpoints(e *echo.Group, service *Service) {
 // @Tags root
 // @Accept */*
 // @Produce json
-// @Success 200 {object} map[string]interface{}
+// @Success 200 {array} string
 // @Router /devices [get]
 func listDeviceKeys(service *Service) echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -46,7 +46,8 @@ func listDeviceKeys(service *Service) echo.HandlerFunc {
 // @Accept */*
 // @Produce json
 // @Success 200 {object} map[string]interface{}
-// @Router /devices/:id [get]
+// @Param        key   path      string  true  "Device Key"
+// @Router /devices/{key} [get]
 func getDevice(service *Service) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		key := c.Param("key")

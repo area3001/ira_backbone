@@ -24,9 +24,32 @@ paths:
         "200":
           description: OK
           schema:
+            items:
+              type: string
+            type: array
+      summary: get the keys for known devices.
+      tags:
+      - root
+  /devices/{key}:
+    get:
+      consumes:
+      - '*/*'
+      description: get the information for a device.
+      parameters:
+      - description: Device Key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
             additionalProperties: true
             type: object
-      summary: get the keuys for known devices.
+      summary: get the information for a device.
       tags:
       - root
 schemes:

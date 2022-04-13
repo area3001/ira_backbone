@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"github.com/area3001/goira/app"
 	"github.com/area3001/goira/comm"
+	"github.com/area3001/goira/docs"
 	_ "github.com/area3001/goira/docs"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -45,6 +47,8 @@ func main() {
 	defer func() {
 		_ = nc.Close()
 	}()
+
+	docs.SwaggerInfo.Host = fmt.Sprintf("%s:1323", os.Getenv("GOIRA_API_HOST"))
 
 	e := echo.New()
 	e.Use(middleware.Logger())

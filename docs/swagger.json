@@ -33,7 +33,42 @@
                 "tags": [
                     "root"
                 ],
-                "summary": "get the keuys for known devices.",
+                "summary": "get the keys for known devices.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/devices/{key}": {
+            "get": {
+                "description": "get the information for a device.",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "root"
+                ],
+                "summary": "get the information for a device.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device Key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
