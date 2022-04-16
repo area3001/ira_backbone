@@ -1,4 +1,48 @@
 basePath: /
+definitions:
+  core.Effect:
+    properties:
+      backgroundBlue:
+        type: integer
+      backgroundGreen:
+        type: integer
+      backgroundRed:
+        type: integer
+      crossfade:
+        type: integer
+      foregroundBlue:
+        type: integer
+      foregroundGreen:
+        type: integer
+      foregroundRed:
+        type: integer
+      kind:
+        type: integer
+      speed:
+        type: integer
+    type: object
+  devices.Device:
+    properties:
+      external_mode:
+        type: string
+      hardware:
+        $ref: '#/definitions/devices.Hardware'
+      ip:
+        type: string
+      last_beat:
+        type: string
+      mac:
+        type: string
+      mode:
+        type: string
+    type: object
+  devices.Hardware:
+    properties:
+      kind:
+        type: string
+      revision:
+        type: string
+    type: object
 host: localhost:1323
 info:
   contact:
@@ -31,6 +75,32 @@ paths:
       tags:
       - root
   /devices/{key}:
+    delete:
+      description: Reset a device after a certain delay.
+      parameters:
+      - description: Device Key
+        in: path
+        name: key
+        required: true
+        type: string
+      - description: Restart delay expressed in milliseconds
+        in: body
+        name: delay
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: ""
+        "500":
+          description: ""
+      summary: reset a device.
+      tags:
+      - root
     get:
       consumes:
       - '*/*'
@@ -47,9 +117,131 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/devices.Device'
       summary: get the information for a device.
+      tags:
+      - root
+  /devices/{key}/blink:
+    post:
+      description: Blink the debug led on a device for a certain number of times.
+      parameters:
+      - description: Device Key
+        in: path
+        name: key
+        required: true
+        type: string
+      - description: The amount of times to blink
+        in: body
+        name: times
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: ""
+      summary: blink the debug led on a device.
+      tags:
+      - root
+  /devices/{key}/fx:
+    post:
+      description: |-
+        Set the current effect for a device.
+        The following effects are available:
+        - 0: PixelLoopFx
+        - 1: RandomPixelLoopFx
+        - 2: ForegroundBackgroundLoopFx
+        - 3: ForegroundBackgroundSwitchFx
+        - 4: Fire2021Fx
+      parameters:
+      - description: Device Key
+        in: path
+        name: key
+        required: true
+        type: string
+      - description: the effect to apply
+        in: body
+        name: effect
+        required: true
+        schema:
+          $ref: '#/definitions/core.Effect'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: ""
+      summary: set the current effect for a device
+      tags:
+      - root
+  /devices/{key}/mode:
+    post:
+      description: |-
+        Set the execution mode for a device.
+        Execution modes define what data is allowed to be sent to/from the IRA
+        Valid modes are:
+        - 0: ExternallySet
+        - 1: DmxIn
+        - 2: DmxOut
+        - 3: DmxToPixelsWithIr
+        - 4: DmxToPixels
+        - 5: RgbToPixelsWithIr
+        - 6: RgbToPixels
+        - 7: FxToPixelsWithIr
+        - 8: FxToPixels
+        - 9: AutoFxWithIr
+        - 10: AutoFx
+        - 11: Emergency,
+      parameters:
+      - description: Device Key
+        in: path
+        name: key
+        required: true
+        type: string
+      - description: Device Mode
+        in: formData
+        name: mode
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: ""
+      summary: set the mode of a device.
+      tags:
+      - root
+  /devices/{key}/rgb:
+    post:
+      description: Send RGB Data to a device
+      parameters:
+      - description: Device Key
+        in: path
+        name: key
+        required: true
+        type: string
+      - description: the rgb data to send
+        in: body
+        name: data
+        required: true
+        schema:
+          items:
+            type: integer
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: ""
+      summary: Send RGB Data to a device
       tags:
       - root
 schemes:

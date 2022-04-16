@@ -9,15 +9,15 @@ const (
 )
 
 type Effect struct {
-	Kind            byte
-	Speed           byte
-	Crossfade       byte
-	ForegroundRed   byte
-	ForegroundGreen byte
-	ForegroundBlue  byte
-	BackgroundRed   byte
-	BackgroundGreen byte
-	BackgroundBlue  byte
+	Kind            byte `json:"kind"`
+	Speed           byte `json:"speed"`
+	Crossfade       byte `json:"crossfade"`
+	ForegroundRed   byte `json:"foregroundRed"`
+	ForegroundGreen byte `json:"foregroundGreen"`
+	ForegroundBlue  byte `json:"foregroundBlue"`
+	BackgroundRed   byte `json:"backgroundRed"`
+	BackgroundGreen byte `json:"backgroundGreen"`
+	BackgroundBlue  byte `json:"backgroundBlue"`
 }
 
 func (e *Effect) ToBytes() []byte {

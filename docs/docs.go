@@ -77,10 +77,269 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/devices.Device"
                         }
                     }
+                }
+            },
+            "delete": {
+                "description": "Reset a device after a certain delay.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "root"
+                ],
+                "summary": "reset a device.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device Key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Restart delay expressed in milliseconds",
+                        "name": "delay",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": ""
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/devices/{key}/blink": {
+            "post": {
+                "description": "Blink the debug led on a device for a certain number of times.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "root"
+                ],
+                "summary": "blink the debug led on a device.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device Key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "The amount of times to blink",
+                        "name": "times",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/devices/{key}/fx": {
+            "post": {
+                "description": "Set the current effect for a device.\nThe following effects are available:\n- 0: PixelLoopFx\n- 1: RandomPixelLoopFx\n- 2: ForegroundBackgroundLoopFx\n- 3: ForegroundBackgroundSwitchFx\n- 4: Fire2021Fx",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "root"
+                ],
+                "summary": "set the current effect for a device",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device Key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "the effect to apply",
+                        "name": "effect",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/core.Effect"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/devices/{key}/mode": {
+            "post": {
+                "description": "Set the execution mode for a device.\nExecution modes define what data is allowed to be sent to/from the IRA\nValid modes are:\n- 0: ExternallySet\n- 1: DmxIn\n- 2: DmxOut\n- 3: DmxToPixelsWithIr\n- 4: DmxToPixels\n- 5: RgbToPixelsWithIr\n- 6: RgbToPixels\n- 7: FxToPixelsWithIr\n- 8: FxToPixels\n- 9: AutoFxWithIr\n- 10: AutoFx\n- 11: Emergency,",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "root"
+                ],
+                "summary": "set the mode of a device.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device Key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Device Mode",
+                        "name": "mode",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/devices/{key}/rgb": {
+            "post": {
+                "description": "Send RGB Data to a device",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "root"
+                ],
+                "summary": "Send RGB Data to a device",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device Key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "the rgb data to send",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "core.Effect": {
+            "type": "object",
+            "properties": {
+                "backgroundBlue": {
+                    "type": "integer"
+                },
+                "backgroundGreen": {
+                    "type": "integer"
+                },
+                "backgroundRed": {
+                    "type": "integer"
+                },
+                "crossfade": {
+                    "type": "integer"
+                },
+                "foregroundBlue": {
+                    "type": "integer"
+                },
+                "foregroundGreen": {
+                    "type": "integer"
+                },
+                "foregroundRed": {
+                    "type": "integer"
+                },
+                "kind": {
+                    "type": "integer"
+                },
+                "speed": {
+                    "type": "integer"
+                }
+            }
+        },
+        "devices.Device": {
+            "type": "object",
+            "properties": {
+                "external_mode": {
+                    "type": "string"
+                },
+                "hardware": {
+                    "$ref": "#/definitions/devices.Hardware"
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "last_beat": {
+                    "type": "string"
+                },
+                "mac": {
+                    "type": "string"
+                },
+                "mode": {
+                    "type": "string"
+                }
+            }
+        },
+        "devices.Hardware": {
+            "type": "object",
+            "properties": {
+                "kind": {
+                    "type": "string"
+                },
+                "revision": {
+                    "type": "string"
                 }
             }
         }
