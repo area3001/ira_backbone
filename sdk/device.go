@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/binary"
-	"encoding/hex"
 	"fmt"
 	"github.com/area3001/goira/comm"
 	"github.com/area3001/goira/core"
 	"github.com/nats-io/nats.go"
+	"image/color"
 	"time"
 )
 
@@ -37,7 +37,16 @@ func (d *Device) SetMode(mode *core.Mode) error {
 		return fmt.Errorf("no mode provided")
 	}
 
-	return d.nc.Call("mode", d.Meta.MAC, []byte(fmt.Sprintf("%d", mode.Code)))
+	response, err := d.nc.Request("mode", d.Meta.MAC, []byte(fmt.Sprintf("%d", mode.Code)))
+	if err != nil {
+		return err
+	}
+
+	if string(response) != "+OK" {
+		return fmt.Errorf("unexpected response: %s", response)
+	}
+
+	return nil
 }
 
 func (d *Device) SetConfig(param string, value string) error {
@@ -73,33 +82,40 @@ func (d *Device) SendRgbRaw(data []byte) error {
 	return d.nc.Call("rgb", d.Meta.MAC, []byte(base64.StdEncoding.EncodeToString(data)))
 }
 
-func (d *Device) SendRgbPixels(offset int, hexCodes []string) error {
-	// -- construct the packet
-	bytesPerPixel := len(hexCodes[0])
-	if bytesPerPixel != 6 && bytesPerPixel != 8 {
-		return fmt.Errorf("wrong number of pixel channels")
+func (d *Device) SendRgbPixels(offset uint16, colors []color.RGBA) error {
+	buf := toRgbBuffer(offset, colors)
+
+	resp, err := d.nc.Request("rgb", d.Meta.MAC, []byte(base64.StdEncoding.EncodeToString(buf.Bytes())))
+	if err != nil {
+		return err
 	}
 
-	buf := new(bytes.Buffer)
-	binary.Write(buf, binary.LittleEndian, uint16(offset))
-	binary.Write(buf, binary.LittleEndian, uint16(len(hexCodes)))
-
-	for idx, arg := range hexCodes {
-		b, err := hex.DecodeString(arg)
-		if err != nil {
-			return fmt.Errorf("data %s for pixel %d is invalid: %s", arg, idx, err)
-		}
-
-		if len(b) != bytesPerPixel {
-			return fmt.Errorf("data %s for pixel %d is invalid: inconsistent number of bytes per pixel", arg, idx)
-		}
-
-		buf.Write(b)
+	if string(resp) != "+OK" {
+		return fmt.Errorf("operation failed: %s", resp)
 	}
 
-	return d.nc.Call("rgb", d.Meta.MAC, []byte(base64.StdEncoding.EncodeToString(buf.Bytes())))
+	return nil
 }
 
 func (d *Device) SendFx(effect *core.Effect) error {
 	return d.nc.Call("fx", d.Meta.MAC, effect.ToBytes())
+}
+
+func toRgbBuffer(offset uint16, colors []color.RGBA) *bytes.Buffer {
+	buf := new(bytes.Buffer)
+
+	//of := make([]byte, 4)
+	//binary.LittleEndian.PutUint16(of, offset)
+	//buf.Write(of)
+
+	binary.Write(buf, binary.BigEndian, offset)
+	binary.Write(buf, binary.BigEndian, uint16(len(colors)))
+
+	for _, c := range colors {
+		binary.Write(buf, binary.BigEndian, c.R)
+		binary.Write(buf, binary.BigEndian, c.G)
+		binary.Write(buf, binary.BigEndian, c.B)
+	}
+
+	return buf
 }

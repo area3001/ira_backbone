@@ -60,7 +60,26 @@ func (c *NatsClient) IsConnected() bool {
 
 func (c *NatsClient) Broadcast(channel string) error {
 	subject := fmt.Sprintf("%s.%s", c.root, channel)
-	return c.nc.Publish(subject, []byte{})
+
+	if err := c.nc.Publish(subject, []byte{}); err != nil {
+		return err
+	}
+
+	return c.nc.Flush()
+}
+
+func (c *NatsClient) Request(channel string, device string, data []byte) ([]byte, error) {
+	subject := fmt.Sprintf("%s.%s.%s", c.root, device, channel)
+	response, err := c.nc.Request(subject, data, 10*time.Second)
+	if err != nil {
+		return nil, fmt.Errorf("calling channel %s for device %s failed: %v", channel, device, err)
+	}
+
+	if response != nil {
+		return response.Data, nil
+	}
+
+	return nil, nil
 }
 
 func (c *NatsClient) Call(channel string, device string, data []byte) error {

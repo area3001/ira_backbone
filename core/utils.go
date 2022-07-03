@@ -30,10 +30,6 @@ func ParseStringToUint8(s string) (uint8, error) {
 func ParseHexColor(s string) (c color.RGBA, err error) {
 	c.A = 0xff
 
-	if s[0] != '#' {
-		return c, errInvalidFormat
-	}
-
 	hexToByte := func(b byte) byte {
 		switch {
 		case b >= '0' && b <= '9':
@@ -48,14 +44,14 @@ func ParseHexColor(s string) (c color.RGBA, err error) {
 	}
 
 	switch len(s) {
-	case 7:
-		c.R = hexToByte(s[1])<<4 + hexToByte(s[2])
-		c.G = hexToByte(s[3])<<4 + hexToByte(s[4])
-		c.B = hexToByte(s[5])<<4 + hexToByte(s[6])
-	case 4:
-		c.R = hexToByte(s[1]) * 17
-		c.G = hexToByte(s[2]) * 17
-		c.B = hexToByte(s[3]) * 17
+	case 6:
+		c.R = hexToByte(s[0])<<4 + hexToByte(s[1])
+		c.G = hexToByte(s[2])<<4 + hexToByte(s[3])
+		c.B = hexToByte(s[4])<<4 + hexToByte(s[5])
+	case 3:
+		c.R = hexToByte(s[0]) * 17
+		c.G = hexToByte(s[1]) * 17
+		c.B = hexToByte(s[2]) * 17
 	default:
 		err = errInvalidFormat
 	}
