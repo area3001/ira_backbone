@@ -9,6 +9,7 @@ import (
 
 const (
 	MacVarName     = "mac_string"
+	NameVarName    = "NAME"
 	IpVarName      = "IP"
 	HwTypeVarName  = "HWTYPE"
 	HwRevVarName   = "HWREV"
@@ -18,6 +19,7 @@ const (
 
 type Device struct {
 	MAC          string    `json:"mac"`
+	Name         string    `json:"name"`
 	IP           string    `json:"ip"`
 	Hardware     Hardware  `json:"hardware"`
 	Mode         string    `json:"mode"`
@@ -38,6 +40,7 @@ func ParseDevice(m *nats.Msg) (*Device, error) {
 
 	return &Device{
 		MAC:          core.MapString(data, MacVarName, ""),
+		Name:         core.MapString(data, NameVarName, ""),
 		IP:           core.MapString(data, IpVarName, ""),
 		ExternalMode: core.MapString(data, ExtModeVarName, ""),
 		Mode:         core.MapString(data, ModeVarName, ""),

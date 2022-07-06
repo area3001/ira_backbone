@@ -23,6 +23,10 @@ var (
 	}}
 )
 
+var Effects = []*EffectKind{
+	PixelLoopFx, RandomPixelLoopFx, ForegroundBackgroundLoopFx, ForegroundBackgroundSwitchFx, Fire2021Fx,
+}
+
 var (
 	ForegroundFxParam = &EffectParam{"fg", "The foreground color"}
 	BackgroundFxParam = &EffectParam{"bg", "The background color"}
@@ -70,14 +74,14 @@ func NewEffect(kind *EffectKind, params map[string]string) (*Effect, error) {
 			if err != nil {
 				return nil, fmt.Errorf("invalid background color: %w", err)
 			}
-			result.Foreground = bg
+			result.Background = bg
 
 		case SpeedFxParam:
 			val, err := ParseStringToUint8(param)
 			if err != nil {
 				return nil, fmt.Errorf("invalid speed: %w", err)
 			}
-			result.Speed = val
+			result.Speed = 255 - val
 
 		case CrossfadeFxParam:
 			val, err := ParseStringToUint8(param)

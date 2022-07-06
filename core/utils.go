@@ -19,7 +19,7 @@ func MapString(m map[string]interface{}, key string, defaultValue string) string
 var errInvalidFormat = errors.New("invalid format")
 
 func ParseStringToUint8(s string) (uint8, error) {
-	i, err := strconv.ParseInt("127", 10, 8)
+	i, err := strconv.ParseInt(s, 10, 16)
 	if err != nil {
 		return 0, err
 	}

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"github.com/area3001/goira/comm"
 	"github.com/area3001/goira/core"
@@ -20,6 +21,7 @@ type Device struct {
 
 type DeviceMeta struct {
 	MAC          string    `json:"mac"`
+	Name         string    `json:"name"`
 	IP           string    `json:"ip"`
 	Hardware     Hardware  `json:"hardware"`
 	Mode         string    `json:"mode"`
@@ -62,6 +64,29 @@ func (d *Device) SetConfig(param string, value string) error {
 	return d.nc.Call("config", d.Meta.MAC, []byte(base64.StdEncoding.EncodeToString(buf.Bytes())))
 }
 
+func (d *Device) SetName(name string) error {
+	response, err := d.nc.Request("name", d.Meta.MAC, []byte(name))
+	if err != nil {
+		return err
+	}
+
+	result := string(response)
+	if result != "+OK" {
+		return errors.New(result)
+	}
+
+	return nil
+}
+
+func (d *Device) GetName(name string) (string, error) {
+	response, err := d.nc.Request("name", d.Meta.MAC, []byte{})
+	if err != nil {
+		return "", err
+	}
+
+	return string(response), nil
+}
+
 func (d *Device) Blink(times int) error {
 	return d.nc.Call("blink", d.Meta.MAC, []byte(fmt.Sprintf("%d", times)))
 }
@@ -98,7 +123,7 @@ func (d *Device) SendRgbPixels(offset uint16, colors []color.RGBA) error {
 }
 
 func (d *Device) SendFx(effect *core.Effect) error {
-	return d.nc.Call("fx", d.Meta.MAC, effect.ToBytes())
+	return d.nc.Call("fx", d.Meta.MAC, []byte(base64.StdEncoding.EncodeToString(effect.ToBytes())))
 }
 
 func toRgbBuffer(offset uint16, colors []color.RGBA) *bytes.Buffer {
