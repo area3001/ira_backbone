@@ -280,32 +280,51 @@ const docTemplate = `{
         "core.Effect": {
             "type": "object",
             "properties": {
-                "backgroundBlue": {
-                    "type": "integer"
-                },
-                "backgroundGreen": {
-                    "type": "integer"
-                },
-                "backgroundRed": {
-                    "type": "integer"
+                "background": {
+                    "type": "string"
                 },
                 "crossfade": {
                     "type": "integer"
                 },
-                "foregroundBlue": {
-                    "type": "integer"
-                },
-                "foregroundGreen": {
-                    "type": "integer"
-                },
-                "foregroundRed": {
-                    "type": "integer"
+                "foreground": {
+                    "type": "string"
                 },
                 "kind": {
-                    "type": "integer"
+                    "$ref": "#/definitions/core.EffectKind"
                 },
                 "speed": {
                     "type": "integer"
+                }
+            }
+        },
+        "core.EffectKind": {
+            "type": "object",
+            "properties": {
+                "allowedParams": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/core.EffectParam"
+                    }
+                },
+                "code": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "core.EffectParam": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -328,6 +347,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "mode": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }

@@ -12,12 +12,17 @@ type Logic struct {
 }
 
 func (l *Logic) Connect(client *comm.NatsClient) error {
-	return client.HandleBroadcast("announce", func(msg *nats.Msg) {
+	err := client.HandleBroadcast("announce", func(msg *nats.Msg) {
 		if err := l.handleAnnounce(msg); err != nil {
 			errMsg := fmt.Sprintf("handling device announcement failed: %v", err)
 			log.Println(errMsg)
 		}
 	})
+	if err != nil {
+		return fmt.Errorf("unable to start listening for announcements: %w", err)
+	}
+
+	return nil
 }
 
 func (l *Logic) handleAnnounce(msg *nats.Msg) error {

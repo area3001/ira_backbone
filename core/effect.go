@@ -1,6 +1,7 @@
 package core
 
 import (
+	"encoding/json"
 	"fmt"
 	"image/color"
 )
@@ -100,8 +101,8 @@ type Effect struct {
 	Kind       *EffectKind `json:"kind"`
 	Speed      uint8       `json:"speed"`
 	Crossfade  uint8       `json:"crossfade"`
-	Foreground color.RGBA  `json:"foreground"`
-	Background color.RGBA  `json:"background"`
+	Foreground color.RGBA  `json:"foreground" swaggertype:"string"`
+	Background color.RGBA  `json:"background" swaggertype:"string"`
 }
 
 func (e *Effect) ToBytes() []byte {
@@ -110,4 +111,44 @@ func (e *Effect) ToBytes() []byte {
 		e.Foreground.R, e.Foreground.G, e.Foreground.B,
 		e.Background.R, e.Background.G, e.Background.B,
 	}
+}
+
+func (e Effect) MarshalJSON() ([]byte, error) {
+	we := wireEffect{
+		Kind:       e.Kind,
+		Speed:      e.Speed,
+		Crossfade:  e.Crossfade,
+		Foreground: fmt.Sprintf("#%02x%02x%02x", e.Foreground.R, e.Foreground.G, e.Foreground.B),
+		Background: fmt.Sprintf("#%02x%02x%02x", e.Background.R, e.Background.G, e.Background.B),
+	}
+	return json.Marshal(we)
+}
+
+func (e *Effect) UnmarshalJSON(data []byte) error {
+	var we wireEffect
+	if err := json.Unmarshal(data, &we); err != nil {
+		return err
+	}
+
+	fg, err := ParseHexColor(we.Foreground)
+	if err != nil {
+		return fmt.Errorf("unable to parse foreground color: %w", err)
+	}
+
+	bg, err := ParseHexColor(we.Background)
+	if err != nil {
+		return fmt.Errorf("unable to parse background color: %w", err)
+	}
+
+	*e = Effect{Kind: we.Kind, Speed: we.Speed, Crossfade: we.Crossfade, Foreground: fg, Background: bg}
+
+	return nil
+}
+
+type wireEffect struct {
+	Kind       *EffectKind `json:"kind"`
+	Speed      uint8       `json:"speed"`
+	Crossfade  uint8       `json:"crossfade"`
+	Foreground string      `json:"foreground"`
+	Background string      `json:"background"`
 }

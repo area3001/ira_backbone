@@ -2,24 +2,36 @@ basePath: /
 definitions:
   core.Effect:
     properties:
-      backgroundBlue:
-        type: integer
-      backgroundGreen:
-        type: integer
-      backgroundRed:
-        type: integer
+      background:
+        type: string
       crossfade:
         type: integer
-      foregroundBlue:
-        type: integer
-      foregroundGreen:
-        type: integer
-      foregroundRed:
-        type: integer
+      foreground:
+        type: string
       kind:
-        type: integer
+        $ref: '#/definitions/core.EffectKind'
       speed:
         type: integer
+    type: object
+  core.EffectKind:
+    properties:
+      allowedParams:
+        items:
+          $ref: '#/definitions/core.EffectParam'
+        type: array
+      code:
+        type: integer
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  core.EffectParam:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
     type: object
   devices.Device:
     properties:
@@ -34,6 +46,8 @@ definitions:
       mac:
         type: string
       mode:
+        type: string
+      name:
         type: string
     type: object
   devices.Hardware:
