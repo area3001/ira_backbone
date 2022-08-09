@@ -51,7 +51,7 @@ func (d *Device) SetMode(mode *core.Mode) error {
 	return nil
 }
 
-func (d *Device) SetConfig(param string, value string) error {
+func (d *Device) SetConfig(param string, value byte) error {
 	buf := new(bytes.Buffer)
 
 	b, fnd := ConfigParams[param]
@@ -59,7 +59,7 @@ func (d *Device) SetConfig(param string, value string) error {
 		return fmt.Errorf("%s: invalid parameter", param)
 	}
 	buf.Write(b)
-	buf.WriteString(value)
+	buf.WriteByte(value)
 
 	return d.nc.Call("config", d.Meta.MAC, []byte(base64.StdEncoding.EncodeToString(buf.Bytes())))
 }
