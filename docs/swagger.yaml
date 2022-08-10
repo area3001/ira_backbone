@@ -35,8 +35,12 @@ definitions:
     type: object
   devices.Device:
     properties:
+      config:
+        additionalProperties:
+          type: integer
+        type: object
       external_mode:
-        type: string
+        type: integer
       hardware:
         $ref: '#/definitions/devices.Hardware'
       ip:
@@ -46,9 +50,11 @@ definitions:
       mac:
         type: string
       mode:
-        type: string
+        type: integer
       name:
         type: string
+      version:
+        type: integer
     type: object
   devices.Hardware:
     properties:

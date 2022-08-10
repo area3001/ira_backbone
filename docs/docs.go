@@ -331,8 +331,14 @@ const docTemplate = `{
         "devices.Device": {
             "type": "object",
             "properties": {
+                "config": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
                 "external_mode": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "hardware": {
                     "$ref": "#/definitions/devices.Hardware"
@@ -347,10 +353,13 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "mode": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
+                },
+                "version": {
+                    "type": "integer"
                 }
             }
         },

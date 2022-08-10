@@ -20,13 +20,15 @@ type Device struct {
 }
 
 type DeviceMeta struct {
-	MAC          string    `json:"mac"`
-	Name         string    `json:"name"`
-	IP           string    `json:"ip"`
-	Hardware     Hardware  `json:"hardware"`
-	Mode         string    `json:"mode"`
-	ExternalMode string    `json:"external_mode"`
-	LastBeat     time.Time `json:"last_beat"`
+	MAC          string         `json:"mac"`
+	Name         string         `json:"name"`
+	IP           string         `json:"ip"`
+	Hardware     Hardware       `json:"hardware"`
+	Mode         int            `json:"mode"`
+	ExternalMode int            `json:"external_mode"`
+	LastBeat     time.Time      `json:"last_beat"`
+	Version      int            `json:"version"`
+	Config       map[string]int `json:"config"`
 }
 
 type Hardware struct {

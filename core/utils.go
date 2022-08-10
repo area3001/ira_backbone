@@ -16,6 +16,26 @@ func MapString(m map[string]interface{}, key string, defaultValue string) string
 	return fmt.Sprintf("%s", v)
 }
 
+func MapInt(m map[string]interface{}, key string, defaultValue int) int {
+	v, fnd := m[key]
+	if !fnd {
+		return defaultValue
+	}
+
+	switch val := v.(type) {
+	case int:
+		return val
+	case string:
+		i, _ := strconv.Atoi(val)
+		return i
+	case float64:
+		return int(val)
+	default:
+		i, _ := strconv.Atoi(fmt.Sprintf("%v", val))
+		return i
+	}
+}
+
 var errInvalidFormat = errors.New("invalid format")
 
 func ParseStringToUint8(s string) (uint8, error) {
