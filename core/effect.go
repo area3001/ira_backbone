@@ -22,10 +22,12 @@ var (
 	Fire2021Fx = &EffectKind{Code: 4, Name: "Fire 2021", Description: "Fire !!!", AllowedParams: []*EffectParam{
 		SpeedFxParam, CrossfadeFxParam,
 	}}
+	Rainbow       = &EffectKind{Code: 5, Name: "Rainbow", Description: "Rainbow", AllowedParams: []*EffectParam{}}
+	RainbowSpread = &EffectKind{Code: 6, Name: "Rainbow Spread", Description: "Rainbow Spread", AllowedParams: []*EffectParam{}}
 )
 
 var Effects = []*EffectKind{
-	PixelLoopFx, RandomPixelLoopFx, ForegroundBackgroundLoopFx, ForegroundBackgroundSwitchFx, Fire2021Fx,
+	PixelLoopFx, RandomPixelLoopFx, ForegroundBackgroundLoopFx, ForegroundBackgroundSwitchFx, Fire2021Fx, Rainbow, RainbowSpread,
 }
 
 var (
